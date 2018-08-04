@@ -1,0 +1,17 @@
+dist: trusty
+sudo: required
+
+jobs:
+  include:
+    - stage: build docker image
+      env:
+        - DOCKER_ORGANIZATION=jmarinaro
+        - DOCKER_REPOSITORY=htpasswd
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin quay.io
+      - docker build -t quay.io/$DOCKER_ORGANIZATION/$DOCKER_REPOSITORY .
+      - docker push quay.io/$DOCKER_ORGANIZATION/$DOCKER_REPOSITORY
+
+branches:
+  only:
+  - master
